@@ -1,0 +1,50 @@
+---
+// src/pages/bhamasha.astro
+import MainLayout from '../layouts/MainLayout.astro';
+
+// Server-side rendering (SSR) fetch
+const response = await fetch(new URL('/api/bhamasha', Astro.url));
+const { data: bhamashaList } = await response.json();
+---
+
+<MainLayout title="Bhamasha Directory">
+  <div class="container mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Bhamasha Data</h1>
+    
+    <!-- Table Controls -->
+    <div class="flex justify-between mb-4">
+      <select class="border p-2 rounded" id="entryCount">
+        <option value="10">10 Entries</option>
+        <option value="20">20 Entries</option>
+        <option value="all">All</option>
+      </select>
+      <input type="text" placeholder="Search..." class="border p-2 rounded" />
+    </div>
+
+    <!-- Data Table -->
+    <div class="overflow-x-auto bg-white shadow-md rounded-lg">
+      <table class="min-w-full text-left">
+        <thead class="bg-gray-100 border-b">
+          <tr>
+            <th class="p-4">Sr No</th>
+            <th class="p-4">Name</th>
+            <th class="p-4">Father's Name</th>
+            <th class="p-4">Amount (₹)</th>
+            <th class="p-4">Address</th>
+          </tr>
+        </thead>
+        <tbody>
+          {bhamashaList.map((person, index) => (
+            <tr class="border-b hover:bg-gray-50">
+              <td class="p-4">{index + 1}</td>
+              <td class="p-4 font-semibold">{person.name}</td>
+              <td class="p-4">{person.fathers_name}</td>
+              <td class="p-4 text-green-600 font-bold">₹{person.amount}</td>
+              <td class="p-4">{person.address}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</MainLayout>
